@@ -1,0 +1,46 @@
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+
+<dom-module id="show-list">
+    <template>
+        <template is="dom-repeat" items="[[list]]">
+            <style include="shared-styles">
+              paper-card {
+                margin: 10px;
+                width: 280px;
+                height: 160px;
+              }
+            </style>
+            <paper-card>
+            <div class="card-content">
+               {{item.url}}
+            </div>
+            </paper-card>
+        </template>
+ 
+        <iron-ajax
+            id="requestList"
+            url="https://web-performance-dot-pwa-directory.appspot.com/webpageurl"
+            params='{"type":"all"}'
+            handle-as="json"
+            on-response="handleResponse">
+        </iron-ajax>
+    </template>
+ 
+    <script>
+        Polymer({
+            is: 'show-list',
+            properties: {
+                list: {
+                    type: Array
+                }
+            },
+            ready: function () {
+                this.$.requestList.generateRequest();
+            },
+            handleResponse: function (data) {
+                this.list = data.detail.response;
+            }
+        });
+    </script>
+</dom-module>
